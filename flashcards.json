@@ -1,1 +1,22 @@
-[]
+[
+    {
+        "english": "dog",
+        "spanish": "perro"
+    },
+    {
+        "english": "water",
+        "spanish": "agua"
+    },
+    {
+        "english": "cat",
+        "spanish": "gato"
+    },
+    {
+        "english": "to sleep",
+        "spanish": "dormir"
+    },
+    {
+        "english": "paw",
+        "spanish": "pata"
+    }
+]

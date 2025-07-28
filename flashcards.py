@@ -3,43 +3,46 @@
 import json
 import os
 
+class FlashcardManager:
+    def __init__(self):
+        self.flashcard_file = "flashcards.json"
+        self.flashcard_list = []
+        self.load()
 
-#File where flashcards will be saved
-flashcard_file = "flashcards.json"
-flashcard_list = []  # Format: [("dog", "perro"), ("cat", "gato")]
+    def load(self):
+        if os.path.exists(self.flashcard_file):
+            with open(self.flashcard_file, "r", encoding="utf-8") as file:
+                try:
+                    data = json.load(file)
+                    self.flashcard_list = [(item["english"], item["spanish"]) for item in data]
+                    print(f"Loaded {len(self.flashcard_list)} flashcards.")
+                except json.JSONDecodeError:
+                    print("JSON decode error — starting with empty list.")
+                    self.flashcard_list = []
+        else:
+            self.flashcard_list = []
+
+    def save(self):
+        with open(self.flashcard_file, "w", encoding="utf-8") as file:
+            json.dump(
+                [{"english": eng, "spanish": span} for eng, span in self.flashcard_list],
+                file,
+                indent=4,
+                ensure_ascii=False
+            )
+            print("Flashcards saved.")
+
+    def add(self, english, spanish):
+        if english and spanish:
+            self.flashcard_list.append((english.strip(), spanish.strip()))
+        print(f"Added: {english} → {spanish}")
 
 
-#Load flashcards from the JSON file
-def load_flashcards():
-    global flashcard_list
-    if os.path.exists(flashcard_file):
-        with open(flashcard_file, "r") as file:
-            try:
-                data = json.load(file)
-                flashcard_list = [(item["english"], item["spanish"]) for item in data]
-            except json.JSONDecodeError:
-                flashcard_list = []
-    else:
-        flashcard_list = []
+    def delete_all(self):
+        self.flashcard_list = []
+        with open(self.flashcard_file, "w", encoding="utf-8") as file:
+            json.dump([], file)
+        print("All flashcards deleted.")
 
-
-#Save current flashcards to JSON file
-def save_flashcards():
-    with open(flashcard_file, "w") as file:
-        json.dump(
-            [{"english": eng, "spanish": span} for eng, span in flashcard_list],
-            file,
-            indent=4
-        )
-
-
-#Load existing flashcards immediately when file is imported
-load_flashcards()
-
-
-#Feature to delete all flashcards
-def delete_all_flashcards():
-    global flashcard_list
-    flashcard_list = []
-    with open(flashcard_file, "w") as file:
-        json.dump([], file)
+# Global instance
+flashcards = FlashcardManager()

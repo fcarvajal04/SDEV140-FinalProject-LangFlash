@@ -2,31 +2,24 @@
 
 import tkinter as tk
 from tkinter import messagebox
-from flashcards import flashcard_list, save_flashcards, load_flashcards, delete_all_flashcards
-
-
-#Style Settings - Constants for colors and fonts
-BG_COLOR = "#fdf6e3"
-BTN_COLOR = "#eded12"
-FONT_COLOR = "#333333"
-FONT_MAIN = ("Helvetica", 12)
-FONT_TITLE = ("Helvetica", 20, "bold")
-
+from flashcards import flashcards
+#Import visual style from theme.py
+from theme import *
 
 #Create editor screen
 def create_editor_frame(container, show_frame):
     frame = tk.Frame(container, bg=BG_COLOR)
 
     #Title
-    tk.Label(frame, text="Create Flashcards", font=FONT_TITLE).pack(pady=10)
+    tk.Label(frame, text="Create Flashcards", font=HEADER_FONT, fg=TITLE_COLOR, bg=BG_COLOR).pack(pady=10)
 
     #Entry for English word
-    tk.Label(frame, text = "English word: ", font=FONT_MAIN).pack()
+    tk.Label(frame, text = "English word: ", font=BODY_FONT, fg=FONT_COLOR, width = 10).pack()
     entry_eng = tk.Entry(frame)
     entry_eng.pack()
 
     #Entry for Spanish word
-    tk.Label(frame, text = "Spanish word: ", font=FONT_MAIN).pack()
+    tk.Label(frame, text = "Spanish word: ", font=BODY_FONT, fg=FONT_COLOR, width = 10).pack()
     entry_span = tk.Entry(frame)
     entry_span.pack()
     
@@ -38,8 +31,9 @@ def create_editor_frame(container, show_frame):
         if not eng or not span:
             messagebox.showwarning("Invalid Input", "Both fields must be filled!")
             return
-        flashcard_list.append((eng, span))
-        save_flashcards()
+        
+        flashcards.add(eng, span)
+        flashcards.save()
         messagebox.showinfo("Saved", f"Added: {eng} → {span}")
         
         #Clear inputs
@@ -51,7 +45,8 @@ def create_editor_frame(container, show_frame):
     def confirm_delete():
         confirm = messagebox.askyesno("Confirm Delete", "Are you sure you want to delete ALL flashcards?")
         if confirm:
-            delete_all_flashcards()
+            flashcards.delete_all()
+            flashcards.save()
             messagebox.showinfo("Deleted", "All flashcards have been deleted successfully.")
 
 
@@ -60,29 +55,43 @@ def create_editor_frame(container, show_frame):
         viewer = tk.Toplevel()
         viewer.title("Saved Flashcards")
         viewer.geometry("350x450")
-        viewer.configure(bg="#fdf6e3")
+        viewer.configure(bg=BG_COLOR)
 
-        tk.Label(viewer, text="All Flashcards", font=FONT_MAIN, bg=BG_COLOR).pack(pady=10)
+        tk.Label(viewer, text="All Flashcards", font=HEADER_FONT, fg=TITLE_COLOR, bg=BG_COLOR).pack(pady=10)
 
-        list_frame = tk.Frame(viewer, bg="#fdf6e3")
+        list_frame = tk.Frame(viewer, bg=BG_COLOR)
         list_frame.pack(pady=5)
 
-        load_flashcards()
+        flashcards.load()
 
-        if not flashcard_list:
-            tk.Label(list_frame, text="No flashcards found.", bg="#fdf6e3").pack()
+        if not flashcards.flashcard_list:
+            tk.Label(list_frame, text="No flashcards found.", bg=BG_COLOR).pack()
         else:
-            for i, (eng, span) in enumerate(flashcard_list):
+            for i, (eng, span) in enumerate(flashcards.flashcard_list):
                 # Show both English and Spanish
                 text = f"{i+1}. {eng} → {span}"
-                tk.Label(list_frame, text=text, font=("Helvetica", 12), anchor="w", bg="#fdf6e3").pack(fill="x", padx=10, pady=2)
+                tk.Label(list_frame, text=text, font=(BODY_FONT), anchor="w", bg=BG_COLOR).pack(fill="x", padx=10, pady=2)
 
-
+    # Styled buttons
+    def make_btn(text, command):
+        btn = tk.Button(frame, text=text, command=command, **button_style)
+        btn.bind("<Enter>", on_enter)
+        btn.bind("<Leave>", on_leave)
+        btn.pack(pady=5)
+        return btn
+    
+    def make_btn2(text, command):
+        btn = tk.Button(frame, text=text, command=command, **button_style2)
+        btn.bind("<Enter>", on_enter2)
+        btn.bind("<Leave>", on_leave2)
+        btn.pack(pady=10)
+        return btn
+    
     #Add buttons
-    tk.Button(frame, text="Add Flashcard", command=add_card).pack(pady=5)
-    tk.Button(frame, text="View All Flashcards", command=open_flashcard_viewer).pack(pady=5)
-    tk.Button(frame, text="Delete All Flashcards", command=confirm_delete, fg="red", bg="#FF6B6B").pack(pady=5)
-    tk.Button(frame, text="Back to Menu", command=lambda: show_frame("Main")).pack(pady=5)
+    make_btn(text="Add Flashcard", command=add_card)
+    make_btn(text="View All Flashcards", command=open_flashcard_viewer)
+    make_btn2(text="Delete All Flashcards", command=confirm_delete)
+    make_btn(text="Back to Menu", command=lambda: show_frame("Main"))
 
 
     return frame

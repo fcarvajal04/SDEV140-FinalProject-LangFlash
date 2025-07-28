@@ -3,26 +3,10 @@
 import tkinter as tk
 import editor 
 import practice
-import quiz 
-
-
-# -------------------------------
-#Style Settings - Constants for colors and fonts
-#COLORS
-BG_COLOR = "#fefefe"
-BTN_COLOR = "#85A8D0"
-BTN_HOVER = "#C4D9F0"
-TITLE_COLOR = "#4B6C9C"
-FONT_COLOR = "#2E3D59" 
-WARNING_COLOR = "#FF6B6B"
-FONT_MAIN = ("Helvetica", 16)
-FONT_TITLE = ("Helvetica", 24, "bold")
-
-#FONTS
-TITLE_FONT = ("Georgia", 28, "bold italic")
-HEADER_FONT = ("Segoe UI", 16, "bold")
-BODY_FONT = ("Calibri", 12)
-BUTTON_FONT = ("Calibri", 12)
+import quiz
+from flashcards import flashcards
+#Import visual style from theme.py
+from theme import *
 
 
 # -------------------------------
@@ -35,6 +19,15 @@ root.config(bg=BG_COLOR)
 root.grid_rowconfigure(0, weight=1)
 root.grid_columnconfigure(0, weight=1)
 
+
+# -------------------------------
+#Ensure data from flashcards is saved on exit (defined right after root exists)
+def on_closing():
+    flashcards.save()
+    print("App is closing, saving flashcards...")
+    root.destroy()
+
+root.protocol("WM_DELETE_WINDOW", on_closing)
 
 # -------------------------------
 #Create a container frame inside root to hold all app screens
@@ -104,38 +97,37 @@ spacer_bottom.grid(row=2, column=0, sticky="nsew")
 tk.Label(menu_content, text="LangFlash - English-Spanish Trainer", font=TITLE_FONT, fg=TITLE_COLOR, bg=BG_COLOR).pack(pady=20)
 
 
-#Styled button dictionaries
-button_style = {
-    "font": BUTTON_FONT,
-    "bg": "#85A8D0",
-    "fg": "black",
-    "width": 20,
-    "padx": 10,
-    "pady": 5
-}
+# Helper to create styled button with hover
+def create_hover_button(parent, text, command, style=button_style):
+    btn = tk.Button(parent, text=text, command=command, **style)
+    btn.bind("<Enter>", on_enter)
+    btn.bind("<Leave>", on_leave)
+    btn.pack(pady=5)
+    return btn
 
-button_style2 = {
-    "font": BUTTON_FONT,
-    "bg": "#85A8D0",
-    "fg": WARNING_COLOR,
-    "width": 10,
-    "padx": 5,
-    "pady": 2
-}
+# Helper to create styled button with hover for exit button
+def create_hover_button2(parent, text, command, style2=button_style2):
+    btn = tk.Button(parent, text=text, command=command, **style2)
+    btn.bind("<Enter>", on_enter2)
+    btn.bind("<Leave>", on_leave2)
+    btn.pack(pady=110)
+    return btn
+
+
 #Button to switch to Editor screen (flashcard creation)
-tk.Button(menu_content, text="Create Flashcards", command=lambda: show_frame("Editor"), **button_style).pack(pady=5)
+create_hover_button(menu_content, text="Create Flashcards", command=lambda: show_frame("Editor"))
 
 
 #Button to switch to Practice screen (review mode)
-tk.Button(menu_content, text="Practice Mode", command=lambda: show_frame("Practice"), **button_style).pack(pady=5)
+create_hover_button(menu_content, text="Practice Mode", command=lambda: show_frame("Practice"))
 
 
 #Button to switch to Quiz screen (quiz mode)
-tk.Button(menu_content, text="Quiz Mode", command=lambda: show_frame("Quiz"), **button_style).pack(pady=5)
+create_hover_button(menu_content, text="Quiz Mode", command=lambda: show_frame("Quiz"))
 
 
 #Button to close the application
-tk.Button(menu_content, text="Exit", command=root.destroy, **button_style2).pack(pady=110)
+create_hover_button2(menu_content, text="Exit", command=on_closing)
 
 
 # -------------------------------
