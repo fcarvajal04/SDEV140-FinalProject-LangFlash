@@ -1,6 +1,6 @@
 # theme.py – Style constants for LangFlash
 
-# Colors
+#Colors
 BG_COLOR = "#fefefe"
 BTN_COLOR = "#85A8D0"
 BTN_HOVER = "#C4D9F0"
@@ -9,13 +9,13 @@ FONT_COLOR = "#2E3D59"
 WARNING_COLOR = "#FF6B6B"
 ENTER_WARNING = "#FF0202"
 
-# Fonts
+#Fonts
 TITLE_FONT = ("Georgia", 28, "bold italic")
 HEADER_FONT = ("Segoe UI", 16, "bold")
 BODY_FONT = ("Calibri", 12)
 BUTTON_FONT = ("Calibri", 12)
 
-# Shared button hover functions
+#Shared button hover functions
 def on_enter(event):
     event.widget['background'] = BTN_HOVER
     event.widget['fg'] = TITLE_COLOR  # Change text color on hover
@@ -36,7 +36,7 @@ def on_leave2(event): #For buttons with red text
     event.widget['fg'] =  WARNING_COLOR
     event.widget['relief'] = "raised"
 
-# Styled button dictionaries
+#Styled button dictionaries
 button_style = {
     "font": BUTTON_FONT,
     "bg": BTN_COLOR,
