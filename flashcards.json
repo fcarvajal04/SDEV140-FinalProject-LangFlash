@@ -1,5 +1,9 @@
 [
     {
+        "english": "apple",
+        "spanish": "manzana"
+    },
+    {
         "english": "dog",
         "spanish": "perro"
     },
@@ -8,15 +12,11 @@
         "spanish": "agua"
     },
     {
-        "english": "cat",
-        "spanish": "gato"
-    },
-    {
         "english": "to sleep",
         "spanish": "dormir"
     },
     {
-        "english": "paw",
-        "spanish": "pata"
+        "english": "cat",
+        "spanish": "gato"
     }
 ]

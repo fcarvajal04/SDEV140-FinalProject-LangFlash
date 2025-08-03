@@ -10,7 +10,7 @@ WARNING_COLOR = "#FF6B6B"
 ENTER_WARNING = "#FF0202"
 
 #Fonts
-TITLE_FONT = ("Georgia", 28, "bold italic")
+TITLE_FONT = ("Georgia", 30, "bold italic")
 HEADER_FONT = ("Segoe UI", 16, "bold")
 BODY_FONT = ("Calibri", 12)
 BUTTON_FONT = ("Calibri", 12)
@@ -59,4 +59,30 @@ button_style2 = {
     "pady": 5,
     "relief": "raised",
     "bd": 2
+}
+
+button_style_main = {
+    "font": BUTTON_FONT,
+    "bg": BTN_COLOR,
+    "fg": "black",
+    "activebackground": BTN_HOVER,
+    "width": 220, 
+    "padx": 10,
+    "pady": 10,
+    "height": 50,
+    "relief": "raised",
+    "bd": 8
+}
+
+button_style_main2 = {
+    "font": BUTTON_FONT,
+    "bg": BTN_COLOR,
+    "fg": WARNING_COLOR,
+    "activebackground": BTN_HOVER,
+    "width": 150, 
+    "padx": 10,
+    "pady": 10,
+    "height": 50,
+    "relief": "raised",
+    "bd": 8
 }
